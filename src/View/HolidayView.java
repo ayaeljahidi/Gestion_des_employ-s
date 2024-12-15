@@ -80,6 +80,10 @@ public class HolidayView extends JFrame{
         ajouter.addActionListener(listener);
 
     }
+    
+    public void addDropListener(ActionListener listener) {
+        supprimer.addActionListener(listener);
+    }
 
     
     public void updateTable(Object[][] data) {
@@ -176,5 +180,15 @@ public class HolidayView extends JFrame{
     public JComboBox<String> getNomComboBox() {
         return nom;
     }
+
+
+	public JTable getJT() {
+		return JT;
+	}
+
+
+	public void setJT(JTable jT) {
+		JT = jT;
+	}
 
 }

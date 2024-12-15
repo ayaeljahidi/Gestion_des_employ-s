@@ -3,9 +3,15 @@ package Controller;
 import Model.Holiday;
 import Model.HolidayModel;
 import View.HolidayView;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import java.time.format.DateTimeFormatter;
 
 import DAO.HolidayDAOimpl;
@@ -29,6 +35,7 @@ public class HolidayController {
         
         // Ajouter un congé lorsqu'on clique sur le bouton "Ajouter"
         view.addAjouterListener(e -> addHoliday());
+        view.addDropListener(e -> setupTableClickListener());
     }
     private void initComboBoxData() {
         // Charger les types de congés
@@ -114,6 +121,48 @@ public class HolidayController {
         }
     }
 
+    private void setupTableClickListener() {
+        // On utilise view.getTable() pour obtenir la référence à JTable
+        view.getJT().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = view.getJT().getSelectedRow(); // Récupérer l'index de la ligne sélectionnée
+                
+                if (row != -1) { // Vérifier que la ligne n'est pas vide
+                    // Récupérer l'ID du congé (colonne 0)
+                    int holidayId = (int) view.tableModel.getValueAt(row, 0); 
+                    String employeeName = (String) view.tableModel.getValueAt(row, 1); // Récupérer le nom de l'employé
+
+                    // Obtenir la durée du congé (en jours) pour ajuster le solde
+                    LocalDate dateDebut = (LocalDate) view.tableModel.getValueAt(row, 2);
+                    LocalDate dateFin = (LocalDate) view.tableModel.getValueAt(row, 3);
+                    long daysOff = java.time.temporal.ChronoUnit.DAYS.between(dateDebut, dateFin);
+
+                    int response = JOptionPane.showConfirmDialog(null, 
+                            "Êtes-vous sûr de vouloir supprimer ce congé ?", 
+                            "Confirmation", 
+                            JOptionPane.YES_NO_OPTION);
+                    
+                    if (response == JOptionPane.YES_OPTION) {
+                        // Appeler la méthode pour supprimer le congé dans la base de données
+                        boolean success = dao.deleteHolidayById(holidayId);
+                        
+                        if (success) {
+                            // Mettre à jour le solde de l'employé (ajouter les jours de congé annulés)
+                            int currentSolde = dao.getSolde(employeeName);
+                            dao.updateSolde(employeeName, currentSolde + (int) daysOff);
+
+                            // Supprimer la ligne du modèle de table
+                            view.tableModel.removeRow(row);
+                            view.afficherMessageSucces("Congé supprimé avec succès.");
+                        } else {
+                            view.afficherMessageErreur("Erreur lors de la suppression du congé.");
+                        }
+                    }
+                }
+            }
+        });
+    }
 
 
 }

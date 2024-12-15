@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface GenericDAOI<T> {
     void add(T element);
+    boolean deleteHolidayById(int holidayId);
+
     List<T> getAll();
 
 }

@@ -12,6 +12,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class HolidayDAOimpl implements GenericDAOI<Holiday> {
     private Connection connection;
 
@@ -128,6 +130,18 @@ public class HolidayDAOimpl implements GenericDAOI<Holiday> {
         }
 
         return holidays;
+    }
+    @Override 
+    public boolean deleteHolidayById(int holidayId) {
+        String query = "DELETE FROM Holiday WHERE idHoliday = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, holidayId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // Retourner true si la suppression a réussi
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     
