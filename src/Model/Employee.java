@@ -9,8 +9,11 @@ public class Employee {
     private double salaire;
     private String poste;  // Enum type 'poste_enum'
     private String role;   // Enum type 'role_enum'
+    
 
-    public Employee() {}
+
+
+	public Employee() {}
     public Employee(String nom, String prenom, String email, String telephone, double salaire, String poste, String role) {
         this.nom = nom;
         this.prenom = prenom;

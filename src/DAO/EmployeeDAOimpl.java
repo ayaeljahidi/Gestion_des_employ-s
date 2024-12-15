@@ -27,16 +27,11 @@ public class EmployeeDAOimpl implements EmployeeDAOI {
             stmt.setString(6, employe.getPoste());
             stmt.setString(7, employe.getRole());
             stmt.executeUpdate();
-         /*   int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Insertion réussie !");
-            } else {
-                System.out.println("Aucune ligne insérée.");
-            }*/
+     
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    }    
     
     @Override
     public void dropEmploye(Employee employe) {
@@ -127,4 +122,5 @@ public class EmployeeDAOimpl implements EmployeeDAOI {
         }
         return values;
     }
+   
 }

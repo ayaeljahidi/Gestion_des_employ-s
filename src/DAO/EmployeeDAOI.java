@@ -7,8 +7,6 @@ public interface EmployeeDAOI {
     void dropEmploye(Employee employee);
     void updateEmploye(Employee employee);
     List<Employee> getAllEmployes();
-    
-
     List<String> getPostes();
     List<String> getRoles();
 }
