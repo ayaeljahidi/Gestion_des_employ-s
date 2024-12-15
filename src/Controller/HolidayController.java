@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Holiday;
 import Model.HolidayModel;
 import View.HolidayView;
 import java.time.LocalDate;
@@ -23,7 +24,7 @@ public class HolidayController {
         // Charger les données dans les ComboBox
         initComboBoxData();
         initDateComboBoxData();  // Charger les dates dans les ComboBox de dateDebut et dateFin
-
+        afficherHolidays();
 
         
         // Ajouter un congé lorsqu'on clique sur le bouton "Ajouter"
@@ -73,23 +74,46 @@ public class HolidayController {
     }
     
     private void initDateComboBoxData() {
-        // Définir une date de début et une date de fin (par exemple, du 1er janvier 2024 au 31 décembre 2024)
         LocalDate dateDebut = LocalDate.now();
         LocalDate dateFin = LocalDate.of(2025,2,20); 
         
-        // Format de date
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         
-        // Liste des dates à ajouter
         List<String> dates = new ArrayList<>();
         LocalDate currentDate = dateDebut;
         while (!currentDate.isAfter(dateFin)) {
-            dates.add(currentDate.format(formatter));  // Ajouter la date au format "yyyy-MM-dd"
-            currentDate = currentDate.plusDays(1);  // Incrémenter d'un jour
+            dates.add(currentDate.format(formatter)); 
+            currentDate = currentDate.plusDays(1); 
         }
         
         HolidayView.remplirComboBox(view.DateDebut(), dates);
         HolidayView.remplirComboBox(view.DateFin(), dates);
     }
+    
+    
+    private void afficherHolidays() {
+        try {
+            List<Holiday> holidays = dao.getAll();
+            
+            // Vider le tableau avant d'ajouter de nouvelles données
+            view.tableModel.setRowCount(0); 
+
+            for (Holiday emp : holidays) {
+                Object[] rowData = new Object[5]; // Tableau pour une ligne
+                rowData[0] = emp.getId();          // ID du congé (à ajouter dans votre classe Holiday)
+                rowData[1] = emp.getNom();         // Nom de l'employé
+                rowData[2] = emp.getDateDebut();   // Date de début du congé
+                rowData[3] = emp.getDateFin();     // Date de fin du congé
+                rowData[4] = emp.getType();        // Type du congé
+                
+                view.tableModel.addRow(rowData);        // Ajouter la ligne au modèle de la table
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }

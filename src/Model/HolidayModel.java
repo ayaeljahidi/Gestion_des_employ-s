@@ -11,10 +11,6 @@ public class HolidayModel {
     }
 
     public boolean addHoliday(LocalDate dateDebut, LocalDate dateFin, String type, String nom) {
-     /*   if (view.getSolde() >dao.getSolde(nom)) {
-            System.out.println("Erreur : Solde insuffisant");
-            return false;
-        }*/
 
         if (dateDebut.isAfter(dateFin)) {
             System.out.println("Erreur : La date de début est après la date de fin");
@@ -25,6 +21,7 @@ public class HolidayModel {
         dao.add(holiday);
         return true;
     }
+    
     
   
 }

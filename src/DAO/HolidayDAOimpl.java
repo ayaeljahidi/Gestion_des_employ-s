@@ -100,4 +100,35 @@ public class HolidayDAOimpl implements GenericDAOI<Holiday> {
 
 
     
+    @Override
+    public List<Holiday> getAll() {
+        List<Holiday> holidays = new ArrayList<>();
+        String query = "SELECT idHoliday, nom, type, date_debut, date_fin FROM Holiday"; 
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                Holiday holi = new Holiday();
+                holi.setId(rs.getInt("idHoliday"));
+                holi.setNom(rs.getString("nom")); 
+                holi.setType(rs.getString("type"));
+                
+                java.sql.Date dateDebut = rs.getDate("date_debut");
+                java.sql.Date dateFin = rs.getDate("date_fin");
+                
+                holi.setDateDebut(dateDebut.toLocalDate());
+                holi.setDateFin(dateFin.toLocalDate());
+                
+                holidays.add(holi);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return holidays;
+    }
+
+    
 }

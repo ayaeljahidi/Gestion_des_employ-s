@@ -7,14 +7,12 @@ import Model.Employee;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 public class HolidayView extends JFrame{
     private JComboBox<String> type,dateDebut,dateFin,nom;
     private JButton ajouter, supprimer,modifier,Employes,Conges;
     private JTable JT;
-    private DefaultTableModel tableModel;
+    public DefaultTableModel tableModel;
     private JPanel p0,p1,p2,p3,p4,p5;    
     public HolidayView() {
         setTitle("Gestion des Employés et Congés");
@@ -70,6 +68,9 @@ public class HolidayView extends JFrame{
         p0.add(p4,BorderLayout.CENTER);
         this.add(p0);
         
+        
+        
+
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
